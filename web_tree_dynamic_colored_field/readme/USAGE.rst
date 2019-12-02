@@ -12,6 +12,20 @@
 
     With this example, column which renders 'name' field will have its background colored in red.
 
+* In the tree view declaration, put ``options='{"bg_color": "color_field"}`` attribute in the ``field`` tag::
+
+    ...
+    <field name="arch" type="xml">
+        <tree string="View name">
+            ...
+            <field name="name" options='{"bg_color": "color_field"}'/>
+            ...
+        </tree>
+    </field>
+    ...
+
+    With this example, column which renders 'name' field will have its background colored in color_field's value.
+
 * In the tree view declaration, put ``options='{"fg_color": "white:customer == True"}'`` attribute in the ``field`` tag::
 
     ...
@@ -37,6 +51,19 @@
         </tree>
     </field>
     ...
+
+* In the tree view declaration, use ``options='"background_color_field": "my_color"'`` attribute in the ``tree`` tag::
+
+    ...
+    <field name="arch" type="xml">
+        <tree string="View name" colors="background_color_field: my_color" >
+            ...
+            <field name="my_color" invisible="1"/>
+            ...
+        </tree>
+    </field>
+    ...
+
 
 * If you want to use more than one color, you can split the attributes using ';':
 

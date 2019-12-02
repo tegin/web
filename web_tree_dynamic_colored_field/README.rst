@@ -14,13 +14,13 @@ Colorize field in tree views
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fweb-lightgray.png?logo=github
-    :target: https://github.com/OCA/web/tree/12.0/web_tree_dynamic_colored_field
+    :target: https://github.com/OCA/web/tree/11.0/web_tree_dynamic_colored_field
     :alt: OCA/web
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/web-12-0/web-12-0-web_tree_dynamic_colored_field
+    :target: https://translation.odoo-community.org/projects/web-11-0/web-11-0-web_tree_dynamic_colored_field
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runbot-Try%20me-875A7B.png
-    :target: https://runbot.odoo-community.org/runbot/162/12.0
+    :target: https://runbot.odoo-community.org/runbot/162/11.0
     :alt: Try me on Runbot
 
 |badge1| |badge2| |badge3| |badge4| |badge5| 
@@ -40,6 +40,7 @@ Features
 * Add attribute ``bg_color`` on field's ``options`` to color background of a cell in tree view
 * Add attribute ``fg_color`` on field's ``options`` to change text color of a cell in tree view
 * Add attribute ``color_field`` on the tree element's ``colors`` to use as color
+* Add attribute ``background_color_field`` on the tree element's ``colors`` to use as background-color
 
 **Table of contents**
 
@@ -62,6 +63,20 @@ Usage
     ...
 
     With this example, column which renders 'name' field will have its background colored in red.
+
+* In the tree view declaration, put ``options='{"bg_color": "color_field"}`` attribute in the ``field`` tag::
+
+    ...
+    <field name="arch" type="xml">
+        <tree string="View name">
+            ...
+            <field name="name" options='{"bg_color": "color_field"}'/>
+            ...
+        </tree>
+    </field>
+    ...
+
+    With this example, column which renders 'name' field will have its background colored in color_field's value.
 
 * In the tree view declaration, put ``options='{"fg_color": "white:customer == True"}'`` attribute in the ``field`` tag::
 
@@ -88,6 +103,19 @@ Usage
         </tree>
     </field>
     ...
+
+* In the tree view declaration, use ``options='"background_color_field": "my_color"'`` attribute in the ``tree`` tag::
+
+    ...
+    <field name="arch" type="xml">
+        <tree string="View name" colors="background_color_field: my_color" >
+            ...
+            <field name="my_color" invisible="1"/>
+            ...
+        </tree>
+    </field>
+    ...
+
 
 * If you want to use more than one color, you can split the attributes using ';':
 
@@ -123,7 +151,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/web/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us smashing it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/web/issues/new?body=module:%20web_tree_dynamic_colored_field%0Aversion:%2012.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/web/issues/new?body=module:%20web_tree_dynamic_colored_field%0Aversion:%2011.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -143,6 +171,8 @@ Contributors
 * Holger Brunn <hbrunn@therp.nl>
 * Artem Kostyuk <a.kostyuk@mobilunity.com>
 * Guewen Baconnier <guewen.baconnier@camptocamp.com>
+* Enric Tobella <etobella@creublanca.es>
+* Jaime Arroyo <jaime.arroyo@creublanca.es>
 
 Maintainers
 ~~~~~~~~~~~
@@ -157,6 +187,6 @@ OCA, or the Odoo Community Association, is a nonprofit organization whose
 mission is to support the collaborative development of Odoo features and
 promote its widespread use.
 
-This module is part of the `OCA/web <https://github.com/OCA/web/tree/12.0/web_tree_dynamic_colored_field>`_ project on GitHub.
+This module is part of the `OCA/web <https://github.com/OCA/web/tree/11.0/web_tree_dynamic_colored_field>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

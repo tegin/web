@@ -13,3 +13,4 @@ Features
 * Add attribute ``bg_color`` on field's ``options`` to color background of a cell in tree view
 * Add attribute ``fg_color`` on field's ``options`` to change text color of a cell in tree view
 * Add attribute ``color_field`` on the tree element's ``colors`` to use as color
+* Add attribute ``background_color_field`` on the tree element's ``colors`` to use as background-color

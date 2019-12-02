@@ -10,17 +10,38 @@ odoo.define('web_tree_dynamic_colored_field', function (require) {
          *
          * @override
          */
-        _renderBody: function () {
+        _renderView: function () {
             if (this.arch.attrs.colors) {
-                var colorAttr = this.arch.attrs.colors.split(';');
+                var colors_attr = this.arch.attrs.colors.split(';');
+                var colorAttr = colors_attr.filter(
+                    function(attr) {
+                        return attr.trim().lastIndexOf('color_field', 0) === 0;
+                    }
+                );
+                var backgroundColorAttr = colors_attr.filter(
+                    function(attr) {
+                        return attr.trim().lastIndexOf('background_color_field', 0) === 0;
+                    }
+                );
                 if (colorAttr.length > 0) {
                     var colorField = colorAttr[0].split(':')[1].trim();
                     // validate the presence of that field in tree view
-                    if (this.state.data.length && colorField in this.state.data[0].data) {
+                    if (colorField in this.state.fields) {
                         this.colorField = colorField;
                     } else {
                         console.warn(
                             "No field named '" + colorField + "' present in view."
+                        );
+                    }
+                }
+                if (backgroundColorAttr.length > 0) {
+                    var backgroundColorField = backgroundColorAttr[0].split(':')[1].trim();
+                    // validate the presence of that field in tree view
+                    if (backgroundColorField in this.state.fields) {
+                        this.backgroundColorField = backgroundColorField;
+                    } else {
+                        console.warn(
+                            "No field named '" + backgroundColorField + "' present in view."
                         );
                     }
                 }
@@ -32,11 +53,17 @@ odoo.define('web_tree_dynamic_colored_field', function (require) {
          *
          * @override
          */
+
         _renderBodyCell: function (record, node, colIndex, options) {
             var $td = this._super.apply(this, arguments);
             var ctx = this.getEvalContext(record);
             this.applyColorize($td, record, node, ctx);
             return $td;
+        },
+
+        _setDecorationClasses: function (record, $tr) {
+            this._super.apply(this, arguments);
+            this.applyAllColorize($tr, record);
         },
 
         /**
@@ -45,12 +72,18 @@ odoo.define('web_tree_dynamic_colored_field', function (require) {
          * @param {Query Node} $td a <td> tag inside a table representing a list view
          * @param {Object} node an XML node (must be a <field>)
          */
-        applyColorize: function ($td, record, node, ctx) {
+        applyAllColorize: function ($tr, record) {
             // safely resolve value of `color_field` given in <tree>
             var treeColor = record.data[this.colorField];
             if (treeColor) {
-                $td.css('color', treeColor);
+                $tr.css('color', treeColor);
             }
+            var treeBackgroundColor = record.data[this.backgroundColorField];
+            if (treeBackgroundColor) {
+                $tr.css('background-color', treeBackgroundColor);
+            }
+        },
+        applyColorize: function ($td, record, node, ctx) {
             // apply <field>'s own `options`
             if (!node.attrs.options) { return; }
             if (node.tag !== 'field') { return; }
@@ -60,6 +93,8 @@ odoo.define('web_tree_dynamic_colored_field', function (require) {
             }
             this.applyColorizeHelper($td, nodeOptions, node, 'fg_color', 'color', ctx);
             this.applyColorizeHelper($td, nodeOptions, node, 'bg_color', 'background-color', ctx);
+            this.applyDirectColorizeHelper($td, nodeOptions, node, 'fg_color_field', 'color', ctx);
+            this.applyDirectColorizeHelper($td, nodeOptions, node, 'bg_color_field', 'background-color', ctx);
         },
         /**
          * @param {Object} nodeOptions a mapping of nodeOptions parameters to the color itself
@@ -84,6 +119,13 @@ odoo.define('web_tree_dynamic_colored_field', function (require) {
                         $td.css(cssAttribute, color);
                     }
                 }
+            }
+        },
+
+        applyDirectColorizeHelper: function ($td, nodeOptions, node, nodeAttribute, cssAttribute, ctx) {
+            var field = nodeOptions[nodeAttribute];
+            if (field && ctx[field]) {
+                $td.css(cssAttribute, ctx[field]);
             }
         },
 
