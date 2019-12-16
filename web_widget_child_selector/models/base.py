@@ -1,7 +1,7 @@
 # Copyright 2019 Creu Blanca
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, _
+from odoo import models
 
 
 class Base(models.AbstractModel):
@@ -18,7 +18,7 @@ class Base(models.AbstractModel):
 
     def _get_record_parents(self, field):
         if not self:
-            return [(False, _('Root'))]
+            return []
         return getattr(
             self, self._parent_name
         )._get_record_parents(field) + [(self.id, str(getattr(self, field)))]

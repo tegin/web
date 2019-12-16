@@ -80,10 +80,15 @@ odoo.define('web.web_widget_child_selector', function(require) {
         },
         _onChildSelectionClick: function(event) {
             var target = $(event.target);
-            var index = target.data('index');
             var type =  target.data('type');
-            var value = (type === 'child') ? this.childs[index]: this.parents[index];
-            this._setValue({id: value[0], display_name: value[1]});
+            if (type === 'clear') {
+                this._setValue({id: false});
+            }
+            else {
+                var index = target.data('index');
+                var value = (type === 'child') ? this.childs[index]: this.parents[index];
+                this._setValue({id: value[0], display_name: value[1]});
+            }
         },
         _renderEdit: function() {
             this._set_childs();
